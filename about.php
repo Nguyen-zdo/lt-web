@@ -11,13 +11,29 @@ $kyNang = ["HTML", "CSS", "JavaScript", "PHP", "Responsive Design"];
 
 $duAn = [
     [
-        "ten" => "Bài Tập Thiết Kế Web",
+        "ten" => "Dự án Thiết Kế Web",
         "moTa" => "Tổng hợp các bài tập thực hành HTML/CSS/JavaScript qua từng buổi học — từ layout cơ bản, "
                 . "hiệu ứng tương tác, đến xây dựng giao diện menu dạng tab điều hướng ngang.",
         "congNghe" => ["HTML", "CSS", "JavaScript"],
-        "link" => "index.html",
+        "link" => "https://nguyen-zdo.github.io/BTL/",
         "icon" => "fa-code",
     ],
+    [
+        "ten" => "Dự án Lập Trình Web",
+        "moTa" => "Xây dựng hệ thống quản lý đăng ký lịch học cho sinh viên, "
+                . "hiệu ứng tương tác,xây dựng giao diện, lưu trữ thông tin và tương tác với người dùng.",
+        "congNghe" => ["HTML", "CSS", "JavaScript","PHP", "MySQL"],
+        "link" => "",
+        "icon" => "fa-code",
+    ],
+    [
+        "ten" => "Dự án web đọc sách WEBOOK",
+        "moTa" => "Xây dựng hệ thống quản lý các đầu sách đọc online.",
+        "congNghe" => ["Java"],
+        "link" => "",
+        "icon" => "fa-code",
+    ],
+
     // Thêm dự án khác vào đây theo cùng cấu trúc, ví dụ:
     // [
     //     "ten" => "Tên dự án",
@@ -34,34 +50,42 @@ $duAn = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <title>Giới thiệu - <?php echo htmlspecialchars($hoTen); ?></title>
     <style>
         :root {
-            --brand: rgb(16, 160, 134);
-            --brand-dark: rgb(12, 128, 108);
-            --brand-light: #e6f7f4;
-            --text: #1f2937;
-            --muted: #6b7280;
-            --bg: #F0F8FF;
+            --ink: #1c1b29;
+            --paper: #f1efe6;
+            --paper-line: #e3ded0;
+            --card: #ffffff;
+            --brand: #5b4fe9;
+            --brand-dark: #4038b8;
+            --accent: #f4a620;
+            --accent-dark: #d98a0f;
+            --muted: #6b6880;
         }
 
         * { box-sizing: border-box; }
 
-        html { background-color: #333; }
+        html { background-color: var(--paper); }
         html, body { height: 100%; overscroll-behavior-y: none; }
 
         body {
-            font-family: 'Kanit', sans-serif;
-            background-color: var(--bg);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: var(--ink);
             margin: 0;
             padding: 0;
-            color: var(--text);
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+
+            /* faint notebook dot-grid on a warm paper ground */
+            background-color: var(--paper);
+            background-image: radial-gradient(var(--paper-line) 1.1px, transparent 1.1px);
+            background-size: 22px 22px;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -70,240 +94,284 @@ $duAn = [
 
         main { flex: 1 0 auto; }
 
-        .topbar {
-            background-color: var(--brand);
-            padding: 18px 16px;
-            text-align: center;
-            color: white;
-            font-size: 15px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
         .container {
-            max-width: 1000px;
+            max-width: 1040px;
             margin: 0 auto;
-            padding: 32px 16px 40px;
+            padding: 48px 18px 56px;
         }
 
-        /* Bento-style grid: cards of different sizes tiled together,
-           rather than one long stacked column. */
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
+            gap: 22px;
         }
 
         .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-            padding: 24px;
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            background: var(--card);
+            border: 1px solid rgba(28,27,41,0.08);
+            border-radius: 4px;
+            padding: 26px;
+            transform: rotate(var(--tilt, 0deg));
+            box-shadow: 0 1px 0 rgba(28,27,41,0.04);
+            opacity: 0;
+            animation: settle 0.55s ease forwards;
+            animation-delay: var(--delay, 0s);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+            transform: rotate(0deg) translateY(-3px);
+            box-shadow: 0 14px 28px rgba(28,27,41,0.14);
+            z-index: 2;
         }
 
-        /* Profile card — tall, spans 2 columns x 2 rows */
+        @keyframes settle {
+            from { opacity: 0; transform: translateY(10px) rotate(var(--tilt, 0deg)); }
+            to   { opacity: 1; transform: translateY(0) rotate(var(--tilt, 0deg)); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .card { opacity: 1; animation: none; }
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.6px;
+            color: var(--brand);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .eyebrow::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* ---- Profile card: styled like a student ID / dossier ---- */
         .card-profile {
             grid-column: span 2;
             grid-row: span 2;
-            background: linear-gradient(160deg, var(--brand) 0%, var(--brand-dark) 100%);
-            color: white;
+            --tilt: -1deg;
+            background: var(--ink);
+            color: var(--paper);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        .card-profile::before {
+            /* perforated edge along the bottom, like a torn ticket stub */
+            content: "";
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 14px;
+            background-image: radial-gradient(circle, var(--paper) 5px, transparent 5.5px);
+            background-size: 22px 22px;
+            background-position: -6px 8px;
+            background-repeat: repeat-x;
+        }
+        .id-badge {
+            position: absolute;
+            top: 18px;
+            right: -34px;
+            background: var(--accent);
+            color: var(--ink);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 5px 40px;
+            transform: rotate(35deg);
         }
         .avatar {
-            width: 84px;
-            height: 84px;
+            width: 88px;
+            height: 88px;
             border-radius: 50%;
-            background: white;
+            background: var(--paper);
             color: var(--brand-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-family: 'Fraunces', serif;
+            font-size: 34px;
             font-weight: 700;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
+            border: 3px solid var(--accent);
         }
         .card-profile h1 {
-            font-size: 24px;
-            margin: 0 0 6px;
+            font-family: 'Fraunces', serif;
+            font-size: 27px;
+            margin: 0 0 8px;
             font-weight: 700;
+            line-height: 1.2;
         }
         .card-profile .lop {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--ink);
+            background: var(--paper);
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin-bottom: 14px;
         }
         .card-profile .tagline {
-            font-size: 13px;
+            font-size: 13.5px;
             opacity: 0.85;
-            line-height: 1.5;
+            line-height: 1.6;
+            max-width: 220px;
         }
 
-        /* Bio card — wide, spans 2 columns */
+        /* ---- Bio card ---- */
         .card-bio {
             grid-column: span 2;
+            --tilt: 0.6deg;
         }
-        .card-label {
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--brand);
-            margin-bottom: 10px;
+        .card-bio h2, .card-skills h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 19px;
+            font-weight: 600;
+            margin: 0 0 4px;
         }
         .card-bio p {
-            margin: 0;
+            margin: 10px 0 0;
             font-size: 14.5px;
-            line-height: 1.75;
-            color: var(--text);
+            line-height: 1.8;
+            color: var(--ink);
         }
 
-        /* Skills card — wide, spans 2 columns */
+        /* ---- Skills card: tags styled as washi-tape stickers ---- */
         .card-skills {
             grid-column: span 2;
+            --tilt: -0.5deg;
         }
         .skill-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
+            margin-top: 14px;
         }
         .skill-tag {
-            font-size: 13px;
-            font-weight: 500;
-            background: var(--brand-light);
-            color: var(--brand-dark);
-            padding: 6px 14px;
-            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 600;
+            background: #fff7e6;
+            color: var(--accent-dark);
+            border: 1px solid rgba(244,166,32,0.4);
+            padding: 6px 13px;
+            border-radius: 3px;
+            transform: rotate(var(--r, 0deg));
         }
+        .skill-tag:nth-child(3n) { --r: 1.5deg; }
+        .skill-tag:nth-child(3n+1) { --r: -1.5deg; }
+        .skill-tag:nth-child(3n+2) { --r: 0.5deg; }
 
-        /* Project cards — each spans 2 columns on desktop */
+        /* ---- Project cards ---- */
         .card-project {
             grid-column: span 2;
             display: flex;
             flex-direction: column;
         }
+        .card-project:nth-of-type(odd) { --tilt: 0.5deg; }
+        .card-project:nth-of-type(even) { --tilt: -0.5deg; }
+
         .project-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: var(--brand-light);
-            color: var(--brand-dark);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--ink);
+            color: var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 14px;
         }
         .card-project h3 {
+            font-family: 'Fraunces', serif;
             margin: 0 0 8px;
             font-size: 17px;
-            color: var(--text);
+            font-weight: 600;
+            color: var(--ink);
         }
         .card-project p {
             margin: 0 0 14px;
-            font-size: 14px;
+            font-size: 13.5px;
             color: var(--muted);
-            line-height: 1.65;
+            line-height: 1.7;
             flex-grow: 1;
         }
         .tags {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
         .tag {
-            font-size: 12px;
-            font-weight: 500;
-            background: #f3f4f6;
+            font-size: 11.5px;
+            font-weight: 600;
+            background: var(--paper);
             color: var(--muted);
             padding: 4px 10px;
             border-radius: 999px;
+            border: 1px solid var(--paper-line);
         }
         .project-link {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             align-self: flex-start;
-            font-size: 14px;
-            font-weight: 500;
-            color: white;
-            background: var(--brand);
-            padding: 9px 16px;
-            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--ink);
+            background: transparent;
+            padding: 8px 0;
+            border-bottom: 2px solid var(--ink);
             text-decoration: none;
-            transition: background 0.15s;
+            transition: color 0.15s, border-color 0.15s, gap 0.15s;
         }
-        .project-link:hover { background: var(--brand-dark); }
+        .project-link:hover {
+            color: var(--brand-dark);
+            border-color: var(--accent);
+            gap: 10px;
+        }
 
         @media (max-width: 720px) {
             .grid { grid-template-columns: repeat(2, 1fr); }
             .card-profile { grid-column: span 2; grid-row: span 1; }
             .card-bio, .card-skills, .card-project { grid-column: span 2; }
+            .card { transform: rotate(0deg) !important; }
+            .id-badge { display: none; }
         }
-
-        .home-link {
-            display: block;
-            text-align: center;
-            margin: 28px auto 0;
-            padding: 14px 24px;
-            background: var(--brand-dark);
-            color: white;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            max-width: 260px;
-        }
-        .home-link:hover { background: var(--brand); }
-
-        .footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            flex-shrink: 0;
-        }
-        .footer p { margin: 6px 0; font-size: 14px; }
-        .footer a {
-            color: white;
-            margin: 0 6px;
-            text-decoration: none;
-            font-size: 20px;
-            display: inline-block;
-        }
-        .footer a:hover { opacity: 0.6; }
     </style>
 </head>
 <body onload="document.body.style.opacity = 1;">
-    <div class="topbar">GIỚI THIỆU BẢN THÂN</div>
-
     <main>
         <div class="container">
             <div class="grid">
-                <div class="card card-profile">
+                <div class="card card-profile" style="--delay:0.05s;">
+                    <div class="id-badge">Hồ sơ</div>
                     <div class="avatar"><?php echo htmlspecialchars(mb_substr($hoTen, 0, 1)); ?></div>
                     <h1><?php echo htmlspecialchars($hoTen); ?></h1>
                     <div class="lop"><?php echo htmlspecialchars($lop); ?></div>
                     <div class="tagline"><?php echo htmlspecialchars($tagline); ?></div>
                 </div>
 
-                <div class="card card-bio">
-                    <div class="card-label">Về mình</div>
+                <div class="card card-bio" style="--delay:0.12s;">
+                    <div class="eyebrow">Về mình</div>
                     <p><?php echo nl2br(htmlspecialchars($gioiThieu)); ?></p>
                 </div>
 
-                <div class="card card-skills">
-                    <div class="card-label">Kỹ năng</div>
+                <div class="card card-skills" style="--delay:0.18s;">
+                    <div class="eyebrow">Kỹ năng</div>
                     <div class="skill-tags">
                         <?php foreach ($kyNang as $kn): ?>
                         <span class="skill-tag"><?php echo htmlspecialchars($kn); ?></span>
@@ -311,8 +379,8 @@ $duAn = [
                     </div>
                 </div>
 
-                <?php foreach ($duAn as $du): ?>
-                <div class="card card-project">
+                <?php $i = 0; foreach ($duAn as $du): $i++; ?>
+                <div class="card card-project" style="--delay:<?php echo 0.18 + $i * 0.06; ?>s;">
                     <div class="project-icon"><i class="fa <?php echo htmlspecialchars($du["icon"]); ?>"></i></div>
                     <h3><?php echo htmlspecialchars($du["ten"]); ?></h3>
                     <p><?php echo htmlspecialchars($du["moTa"]); ?></p>
@@ -325,22 +393,7 @@ $duAn = [
                 </div>
                 <?php endforeach; ?>
             </div>
-
-            <a href="index.html" class="home-link">← Về Menu Chính</a>
         </div>
     </main>
-
-    <div class="footer">
-        <p>Liên hệ tôi qua các tài khoản xã hội</p>
-        <div>
-            <a href="#" aria-label="Facebook"><i class="fa fa-facebook-official"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
-            <a href="#" aria-label="Steam"><i class="fa fa-steam"></i></a>
-            <a href="#" aria-label="Pinterest"><i class="fa fa-pinterest-p"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
-        </div>
-        <p>by: Nguyen Do</p>
-    </div>
 </body>
 </html>
