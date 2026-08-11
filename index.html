@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Bài tập - Thiết kế Web</title>
+    <style>
+        :root {
+            --brand: rgb(16, 160, 134);
+            --brand-dark: rgb(12, 128, 108);
+            --brand-light: #e6f7f4;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --bg: #F0F8FF;
+        }
+ 
+        * { box-sizing: border-box; }
+ 
+        html {
+            background-color: #333;
+        }
+ 
+        html, body {
+            height: 100%;
+            overscroll-behavior-y: none;
+        }
+ 
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+ 
+        main { flex: 1 0 auto; }
+        .footer { flex-shrink: 0; }
+ 
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
+        }
+ 
+        a, button { font-family: inherit; }
+ 
+        .header {
+            background-color: var(--brand);
+            text-align: center;
+            padding: 28px 16px;
+            color: white;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .header h1 {
+            font-size: clamp(28px, 6vw, 48px);
+            margin: 0;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .header p {
+            font-size: clamp(14px, 3vw, 18px);
+            margin-top: 10px;
+            opacity: 0.95;
+        }
+ 
+        main {
+            max-width: 900px;
+            margin: 24px auto;
+            padding: 0 16px 40px;
+        }
+ 
+        .search-wrap {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            padding: 12px 0;
+            z-index: 10;
+        }
+        .search-wrap input {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px 16px;
+            border: 2px solid #d7e6e3;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-wrap input:focus {
+            border-color: var(--brand);
+        }
+        
+        .tab-bar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-auto-flow: row;
+            gap: 8px;
+            padding: 4px 4px 12px;
+            margin-bottom: 8px;
+        }
+ 
+        .tab-btn {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 2px solid #d7e6e3;
+            background: white;
+            color: var(--text);
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .tab-btn:hover { border-color: var(--brand); background: var(--brand-light); }
+        .tab-btn:focus-visible {
+            outline: 3px solid var(--brand);
+            outline-offset: 2px;
+        }
+        .tab-btn .count {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-left: 4px;
+        }
+ 
+        @media (max-width: 560px) {
+            .tab-btn { padding: 8px 6px; font-size: 13px; }
+            .tab-btn .count { display: none; }
+        }
+ 
+        .empty-msg {
+            text-align: center;
+            color: var(--muted);
+            padding: 24px 0;
+            font-size: 15px;
+            display: none;
+        }
+ 
+        .home-link {
+            display: block;
+            text-align: center;
+            margin: 28px auto 0;
+            padding: 14px 24px;
+            background: var(--brand-dark);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            max-width: 260px;
+        }
+        .home-link:hover { background: var(--brand); }
+ 
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        .footer p { margin: 6px 0; font-size: 14px; }
+        .footer a {
+            color: white;
+            margin: 0 6px;
+            text-decoration: none;
+            font-size: 20px;
+            display: inline-block;
+        }
+        .footer a:hover { opacity: 0.6; }
+</style>
+</head>
+<body onload="document.body.style.opacity = 1;">
+    <div class="header">
+        <h1>BÀI TẬP LẬP TRÌNH WEB</h1>
+        <p>Đỗ Hoàng Sĩ Nguyên · CNTT D2024B</p>
+    </div>
+
+    <main>
+        <div class="tab-bar" id="tabBar" role="tablist" aria-label="Danh sách buổi học"></div>
+
+        <p class="empty-msg" id="emptyMsg">Không tìm thấy bài tập phù hợp.</p>
+
+        <a href="index.html" class="home-link">← Về Menu Chính</a>
+    </main>
+
+    <div class="footer">
+        <p>Liên hệ tôi qua các tài khoản xã hội</p>
+        <div>
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook-official"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            <a href="#" aria-label="Pinterest"><i class="fa fa-pinterest-p"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+        </div>
+        <p>by: Nguyen Do</p>
+    </div>
+
+    <script>
+        // One entry per session — the href is where its tab links directly.
+        const sessions = [
+            { title: "Buổi 1", href: "about.php" },
+            { title: "Buổi 2", href: "" },
+            { title: "Buổi 3", href: "" },
+            { title: "Buổi 4", href: "" },
+            { title: "Buổi 5", href: "" },
+            { title: "Buổi 6", href: "" },
+            { title: "Buổi 7", href: "" },
+            { title: "Buổi 8", href: "" },
+            { title: "Buổi 9", href: "" },
+        ];
+
+        const tabBar = document.getElementById('tabBar');
+        const emptyMsg = document.getElementById('emptyMsg');
+        const searchBox = document.getElementById('searchBox');
+
+        sessions.forEach(session => {
+            const tab = document.createElement('a');
+            tab.className = 'tab-btn';
+            tab.href = session.href;
+            tab.dataset.label = session.title.toLowerCase();
+            tab.textContent = session.title;
+            tabBar.appendChild(tab);
+        });
+
+    </script>
+</body>
+</html>
